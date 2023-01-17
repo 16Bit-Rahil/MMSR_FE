@@ -9,15 +9,11 @@
   <nb-layout-column>
     <h1 *ngIf="searchSub|async as searchInput">Ergebnis: {{searchInput}}</h1>
     <div class="row" *ngFor="let song of this.searchService.getSimilarSongs() | async; let i = index">
-      <div class="col">
+      <div class="col" >
         <nb-card>
           <nb-card-header class="header">
-              <ng-container *ngIf="this.getCover(song.artist,song.album_name) | async as cover">
-                <img src="{{ cover.album.image[0]['#text'] }}">
-
-              </ng-container>
+                <img src="{{ song.image_url }}">
           </nb-card-header>
-
 
           <nb-card-body>
             <div>

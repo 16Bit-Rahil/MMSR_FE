@@ -2,7 +2,8 @@ export class Song {
   id: string;
   artist: string;
   song: string;
-  album_name: string
+  album_name: string;
+  image_url:string = '';
 
   constructor(id:string, artist:string, song:string, album_name:string) {
   this.id = id;
@@ -10,4 +11,5 @@ export class Song {
   this.song = song;
   this.album_name = album_name;
   }
+
 }

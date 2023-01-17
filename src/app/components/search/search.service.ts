@@ -16,8 +16,6 @@ export class SearchService {
   topTenSimilarSongs:Song[] = [];
   private similarSongsList: string[] = [];
   constructor(private http: HttpClient) {
-
-
     this.http.get('assets/data/id_information_mmsr.tsv', {responseType: "text"}).subscribe(data => {
       let csvToRowArray = data.split('\n');
       for (let idx = 1; idx < csvToRowArray.length; idx++) {
@@ -26,9 +24,6 @@ export class SearchService {
       }
       console.log(this.songs);
     })
-
-
-
   }
   findSongByName(name:string):Song {
     let song = this.songs.find(x => x.song == name);
@@ -44,17 +39,14 @@ export class SearchService {
   }
 
   findSimilarSongs(id:string) {
-
      this.http.get('assets/data/simple_borda.csv', {responseType: "text"}).subscribe(data => {
-      //                 ,1,2,...
-      //0009fFIM1eYThaPg,FYN6Nw0CQ7WR59AP,Uly30J1KEdC9awfI,
       let csvToRowArray = data.split('\n');
       for (let idx = 1; idx < csvToRowArray.length; idx++) {
         let row = csvToRowArray[idx].split(',');
 
         if(row[0] === id) {
 
-          for (let i = 1; i < row.length; i++) {
+          for (let i = 1; i <= 10; i++) {
             this.similarSongsList.push(row[i]);
             console.log(row[i])
           }
@@ -63,20 +55,19 @@ export class SearchService {
         }
 
       }
-      console.log(this.similarSong);
+      console.log('😅 Similar Song: ', this.similarSong);
 
 
       for (let i = 0; i < 10; i++) {
         let s:Song = this.findSongById(this.similarSongsList[i])!;
         this.topTenSimilarSongs.push(s);
+        this.getAlbumCover(this.topTenSimilarSongs[i].artist,this.topTenSimilarSongs[i].album_name).subscribe(data =>{
+          this.topTenSimilarSongs[i].image_url = data.album.image[3]["#text"];
+        })
       }
-
-
-      console.log(this.topTenSimilarSongs);
+      console.log('😎 Top 10 Similar Songs: ',this.topTenSimilarSongs);
       this.topTenSimilarSongs$.next(this.topTenSimilarSongs);
     })
-
-
   }
 
   getSimilarSongs(): Observable<Song[]>{
@@ -84,7 +75,6 @@ export class SearchService {
   }
 
   getAlbumCover(artist:string, album_name:string) {
-    console.log(encodeURI('https://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=76e37b8f0ca99ecb3d3a6ac4132dc0ef&artist='+artist.trim()+'&album='+ album_name.trim() +'&format=json'))
     return this.http.get<APIModel>(encodeURI('https://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=76e37b8f0ca99ecb3d3a6ac4132dc0ef&artist='+artist.trim()+'&album='+ album_name.trim() +'&format=json'))
   }
 }

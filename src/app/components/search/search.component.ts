@@ -5,8 +5,6 @@ import {SearchService} from "./search.service";
 import {Song} from "../../model/song";
 import {APIModel} from "../../model/ApiModel";
 
-
-
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
@@ -18,7 +16,6 @@ export class SearchComponent implements OnInit {
   songs:Subject<Song[]> = new Subject<Song[]>();
 
   searchSub = new BehaviorSubject('')
-  imgSrc = new BehaviorSubject("");
 
   constructor(private search: NbSearchService,
               public searchService: SearchService) {
@@ -28,7 +25,7 @@ export class SearchComponent implements OnInit {
       console.log('search started...')
       console.log('found song: ',song);
       console.log(song.id);
-      let similarSongs = this.searchService.findSimilarSongs(song.id);
+      this.searchService.findSimilarSongs(song.id);
     })
 
 
