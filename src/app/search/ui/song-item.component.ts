@@ -6,7 +6,8 @@ import { Song } from 'src/app/model/song';
     selector: 'song-item',
     template: ` 
     <nb-card-header class="header">
-          <img [src]="song.imgLink">
+          <img [src]="song.imgLink"
+          onerror="this.src='./app/assets/example_cover.png';">
     </nb-card-header>
     <nb-card-body>
       <div class="song-content">
