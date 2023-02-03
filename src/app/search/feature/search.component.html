@@ -1,0 +1,33 @@
+<nb-layout>
+
+  <nb-layout-header>
+    MMSR Projekt
+    <nb-search  type="rotate-layout"></nb-search>
+  </nb-layout-header>
+
+  <nb-layout-column>
+    <ng-container *ngIf="notFound$ | async as notFound;else resultTemplate">
+      <h1 *ngIf="notFound">Keine Ergebnisse</h1>
+    </ng-container>
+    <ng-template #resultTemplate>
+      <ng-container  *ngIf="searchResult$ | async as searchResult">
+        <ng-container  *ngIf="searchResult.totalElements !== 0">
+          <h1>Ergebnis:</h1>
+          <div class="search-result" >
+            <nb-card *ngFor="let song of searchResult.content; let i = index">
+              <song-item
+              [song]="song"></song-item>
+            </nb-card>
+          </div>
+          <div class="load-more-container">
+              <button *ngIf="!searchResult.last" 
+              (click)="loadMore()"
+              nbButton outline status="primary"
+              >Mehr Anzeigen</button>
+          </div>
+          </ng-container>
+      </ng-container>
+    </ng-template>
+  </nb-layout-column>
+
+</nb-layout>

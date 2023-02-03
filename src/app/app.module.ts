@@ -3,19 +3,20 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {NbThemeModule, NbLayoutModule, NbSearchModule, NbCardModule, NbButtonModule} from '@nebular/theme';
+import {NbThemeModule, NbLayoutModule, NbSearchModule, NbCardModule, NbButtonModule,NbListModule} from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { AppRoutingModule } from './app-routing.module';
 import { PageNotFoundComponent } from './components/404/page-not-found.component';
-import { SearchComponent } from './components/search/search.component';
 import {HttpClientModule} from "@angular/common/http";
-import {SearchService} from "./components/search/search.service";
+import { SearchComponent } from './search/feature/search.component';
+import { SongItemComponent } from './search/ui/song-item.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     PageNotFoundComponent,
-    SearchComponent
+    SearchComponent,
+    SongItemComponent
   ],
     imports: [
         BrowserModule,
@@ -27,7 +28,8 @@ import {SearchService} from "./components/search/search.service";
         NbSearchModule,
         NbCardModule,
         NbButtonModule,
-        HttpClientModule
+        HttpClientModule,
+        NbListModule
     ],
   providers: [],
   bootstrap: [AppComponent]
