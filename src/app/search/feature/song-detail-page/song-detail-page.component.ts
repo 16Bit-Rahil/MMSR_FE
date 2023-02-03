@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SearchService } from '../../service/search.service';
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-song-detail-page',
@@ -11,10 +12,11 @@ import { SearchService } from '../../service/search.service';
 })
 export class SongDetailPageComponent implements OnInit {
 
-
-  constructor(private searchService: SearchService) { }
+  songId: any;
+  constructor(private searchService: SearchService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    this.songId = this.route.snapshot.params['id'];
   }
 
 }

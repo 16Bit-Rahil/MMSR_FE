@@ -4,10 +4,9 @@ import { Song } from 'src/app/model/song';
 
 @Component({
     selector: 'song-item',
-    template: ` 
+    template: `
     <nb-card-header class="header">
-          <img [src]="song.imgLink"
-          onerror="this.src='./app/assets/example_cover.png';">
+          <img [src]="song.imgLink" (error)="setDefaultCover()">
     </nb-card-header>
     <nb-card-body>
       <div class="song-content">
@@ -16,19 +15,23 @@ import { Song } from 'src/app/model/song';
         <div class="song-release">{{song.albumName}}</div>
       </div>
     </nb-card-body>
-    <nb-card-footer><button (click)="goToLink(song.youtubeLink)" nbButton>YouTube</button></nb-card-footer>
+    <nb-card-footer><button routerLink="/song/{{song.id}}" nbButton>Details</button></nb-card-footer>
     `,
     styleUrls: ['./song-item.component.css'],
 })
 
 export class SongItemComponent implements OnInit {
     @Input() song!: Song;
-    
+
     constructor() { }
 
     ngOnInit() { }
-    
+
     goToLink(youtubeLink: string) {
         window.open(youtubeLink,"_blank")
-      }
+    }
+
+    setDefaultCover() {
+      this.song.imgLink = 'http://www.scottishculture.org/themes/scottishculture/images/music_placeholder.png';
+    }
 }
