@@ -11,7 +11,8 @@ import { Router } from '@angular/router';
 })
 export class SearchService {
 
-  readonly baseUrl = '/api/songs'
+  readonly baseUrlSong = '/api/songs'
+  readonly baseUrlSimilarSong = '/api/similar-song'
 
   private searchResult$ = new BehaviorSubject<PageResponse<Song>>({} as PageResponse<Song>);
 
@@ -19,7 +20,7 @@ export class SearchService {
     private router:Router) {}
 
   private search$(term:string,page?:number){
-    return this.http.get<PageResponse<Song>>(`${this.baseUrl}?search=${encodeURIComponent(term)}&page=${page ?? 0}&pageSize=10`).pipe(
+    return this.http.get<PageResponse<Song>>(`${this.baseUrlSong}?search=${encodeURIComponent(term)}&page=${page ?? 0}&pageSize=10`).pipe(
       switchMap(page => {
         if(page.totalElements === 0) {
           return of(page)
@@ -53,8 +54,14 @@ export class SearchService {
     return this.searchResult$
   }
   
+
   getSimilarSongs(id: string,page: number){
-    return this.http.get<PageResponse<Song>>(`${this.baseUrl}/song/${encodeURIComponent(id)}&page=${page}&pageSize=10`) 
+    return this.http.get<PageResponse<Song>>(`${this.baseUrlSimilarSong}/${encodeURIComponent(id)}?page=${page}&pageSize=10`).pipe(
+      switchMap(page => {
+        return this.getSongsWithAlbumCover(page.content).pipe(
+          map(songs => ({...page,content: songs} as PageResponse<Song>)))
+      })
+    );
   }
   
 
