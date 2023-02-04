@@ -5,6 +5,7 @@ import {APIModel} from "../../model/ApiModel";
 import {BehaviorSubject, forkJoin, from, lastValueFrom, map, mergeMap, Observable, of, ReplaySubject, Subject, switchMap, take, tap} from "rxjs";
 import { PageResponse } from 'src/app/model/page-response';
 import { Router } from '@angular/router';
+import {Track} from "../../model/TrackInfo";
 
 @Injectable({
   providedIn: 'root'
@@ -53,7 +54,6 @@ export class SearchService {
   getSearchResult(): Observable<PageResponse<Song>>{
     return this.searchResult$
   }
-  
 
   getSimilarSongs(id: string,page: number){
     return this.http.get<PageResponse<Song>>(`${this.baseUrlSimilarSong}/${encodeURIComponent(id)}?page=${page}&pageSize=10`).pipe(
@@ -63,7 +63,10 @@ export class SearchService {
       })
     );
   }
-  
+
+  getSongById(id: string) {
+    return this.http.get<Song>(`api/song/${encodeURIComponent(id)}`);
+  }
 
   private getSongsWithAlbumCover(songs: Song[]): Observable<Song[]>{
     return forkJoin<Song[]>(songs.map( song =>
@@ -72,9 +75,20 @@ export class SearchService {
       )
     ))
   }
-  
+
+  getSongWithAlbumCover(song: Song): Observable<Song>{
+    return this.getAlbumCover(song.artist,song.albumName).pipe(
+        map(val => ({...song,imgLink:val.album.image[3]['#text']}))
+      )
+  }
+
 
   private getAlbumCover(artist:string, album_name:string) {
     return this.http.get<APIModel>(encodeURI('https://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=76e37b8f0ca99ecb3d3a6ac4132dc0ef&artist='+artist.trim()+'&album='+ album_name.trim() +'&format=json'))
+  }
+
+  // http://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key=YOUR_API_KEY&artist=cher&track=believe&format=json
+  getTrackInfo(track:string, artist:string) {
+    return this.http.get<Track>(encodeURI('https://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key=76e37b8f0ca99ecb3d3a6ac4132dc0ef&artist='+artist.trim()+'&track='+ track.trim() +'&format=json'));
   }
 }
