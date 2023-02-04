@@ -5,6 +5,7 @@ import {ActivatedRoute} from "@angular/router";
 import {NbLayoutModule} from "@nebular/theme";
 import {Song} from "../../../model/song";
 import {Track} from "../../../model/TrackInfo";
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-song-detail-page',
@@ -15,33 +16,19 @@ import {Track} from "../../../model/TrackInfo";
 })
 export class SongDetailPageComponent implements OnInit {
 
-  songId: any;
-  // @ts-ignore
-  song: Song;
-  // @ts-ignore
-  songWithCover: Song;
-
-  // @ts-ignore
-  trackInfo: Track;
+  songId!: string;
+  detailsData = new BehaviorSubject<{song: Song, trackInfo: Track} | null>(null);
   constructor(public searchService: SearchService, private route: ActivatedRoute) { }
-
   ngOnInit(): void {
     this.songId = this.route.snapshot.params['songId'];
-    this.searchService.getSongById(this.songId).subscribe(data => {
-      this.song = data;
-      console.log(this.song)
-      this.searchService.getTrackInfo(this.song.songName, this.song.artist).subscribe(data => {
-        this.trackInfo = data;
-        console.log(data)
-      })
-      this.searchService.getSongWithAlbumCover(this.song).subscribe(data => {
-        this.songWithCover = data;
-      });
+    this.searchService.getSongAndTrackDetailById(this.songId).subscribe(resp =>{
+      
+      console.log(resp.trackInfo);
+      this.detailsData.next(resp)
     })
-
   }
 
-  setDefaultCover() {
-    this.song.imgLink = 'http://www.scottishculture.org/themes/scottishculture/images/music_placeholder.png';
+  setDefaultCover(song:Song) {
+    song.imgLink = 'http://www.scottishculture.org/themes/scottishculture/images/music_placeholder.png';
   }
 }

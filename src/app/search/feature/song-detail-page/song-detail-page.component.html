@@ -1,11 +1,13 @@
-<nb-layout *ngIf="this.trackInfo | async">
-  <nb-layout-column>{{song.songName}}
-    <img [src]="songWithCover.imgLink" (error)="setDefaultCover()">
-    <h3>{{song.artist}}</h3>
-    <h5>{{trackInfo.duration}}</h5>
-    <h5>{{trackInfo.playcount}}</h5>
-    <h5>{{trackInfo.wiki.published}}</h5>
-    <p>{{trackInfo.wiki.summary}}</p>
-  </nb-layout-column>
-  <nb-layout-column>Similar Songs</nb-layout-column>
-</nb-layout>
+<ng-container *ngIf="detailsData | async as details">
+    <div>
+        <h1>{{details.song.songName}}</h1>
+        <img [src]="details.song.imgLink" (error)="setDefaultCover(details.song)">
+        <h3>{{details.song.artist}}</h3>
+        <h5>{{details.trackInfo.duration}}</h5>
+        <h5>{{details.trackInfo.playcount}}</h5>
+        <h5>{{details.trackInfo.wiki.published}}</h5>
+        <p>{{details.trackInfo.wiki.summary}}</p>
+    </div>
+    <nb-layout-column>Similar Songs</nb-layout-column>
+</ng-container>
+
