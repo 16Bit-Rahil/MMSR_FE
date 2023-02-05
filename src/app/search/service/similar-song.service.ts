@@ -2,7 +2,23 @@ import {ContentChild, Injectable} from '@angular/core';
 import {Song} from "../../model/song";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {APIModel} from "../../model/ApiModel";
-import {BehaviorSubject, forkJoin, from, lastValueFrom, map, mergeMap, Observable, of, ReplaySubject, Subject, switchMap, take, tap} from "rxjs";
+import {
+  BehaviorSubject,
+  catchError,
+  EMPTY,
+  forkJoin,
+  from,
+  lastValueFrom,
+  map,
+  mergeMap,
+  Observable,
+  of,
+  ReplaySubject,
+  Subject,
+  switchMap,
+  take,
+  tap
+} from "rxjs";
 import { PageResponse } from 'src/app/model/page-response';
 import { Router } from '@angular/router';
 
@@ -63,5 +79,11 @@ export class SimilarSongService {
 
   private getAlbumCover(artist:string, album_name:string) {
     return this.http.get<APIModel>(encodeURI('https://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=76e37b8f0ca99ecb3d3a6ac4132dc0ef&artist='+artist.trim()+'&album='+ album_name.trim() +'&format=json'))
+  }
+  // https://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key=76e37b8f0ca99ecb3d3a6ac4132dc0ef&artist=cher&track=believe&format=json
+  private getTrackInfo(track:string, artist:string): Observable<Track> {
+    return this.http.get<{track:Track}>(encodeURI('https://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key=76e37b8f0ca99ecb3d3a6ac4132dc0ef&artist='+artist.trim()+'&track='+ track.trim() +'&format=json')).pipe(
+      map((resp:{track:Track}) => resp.track)
+    );
   }
 }
