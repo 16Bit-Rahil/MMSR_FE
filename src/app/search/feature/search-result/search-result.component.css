@@ -1,6 +1,7 @@
 .search-result {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  place-items: center;
   grid-gap: 25px;
 }
 .load-more-container {

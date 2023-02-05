@@ -1,8 +1,8 @@
-import {ContentChild, Injectable} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Song} from "../../model/song";
-import {HttpClient, HttpParams} from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
 import {APIModel} from "../../model/ApiModel";
-import {BehaviorSubject, combineLatest, combineLatestAll, concatAll, concatMap, exhaustMap, forkJoin, from, lastValueFrom, map, mergeMap, Observable, of, pipe, ReplaySubject, Subject, switchMap, take, tap} from "rxjs";
+import {BehaviorSubject, forkJoin, map, Observable, of, switchMap} from "rxjs";
 import { PageResponse } from 'src/app/model/page-response';
 import { Router } from '@angular/router';
 import {Track} from "../../model/TrackInfo";
@@ -13,7 +13,6 @@ import {Track} from "../../model/TrackInfo";
 export class SearchService {
 
   readonly baseUrlSong = '/api/songs'
-  readonly baseUrlSimilarSong = '/api/similar-song'
 
   private searchResult$ = new BehaviorSubject<PageResponse<Song>>({} as PageResponse<Song>);
 
@@ -46,22 +45,13 @@ export class SearchService {
       next:(resp) => {
           this.searchResult$.next({
             ...resp,
-            content: [...this.searchResult$.value?.content,...resp.content]
+            content: [...this.searchResult$.value!.content,...resp.content]
           });
       },
     })
   }
-  getSearchResult(): Observable<PageResponse<Song>>{
+  getSearchResult(): Observable<PageResponse<Song> | null>{
     return this.searchResult$
-  }
-
-  getSimilarSongs(id: string,page: number){
-    return this.http.get<PageResponse<Song>>(`${this.baseUrlSimilarSong}/${encodeURIComponent(id)}?page=${page}&pageSize=10`).pipe(
-      switchMap(page => {
-        return this.getSongsWithAlbumCover(page.content).pipe(
-          map(songs => ({...page,content: songs} as PageResponse<Song>)))
-      })
-    );
   }
 
 

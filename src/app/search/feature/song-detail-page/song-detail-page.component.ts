@@ -1,8 +1,8 @@
 import {Component, OnInit, Renderer2} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SearchService } from '../../service/search.service';
-import {ActivatedRoute} from "@angular/router";
-import {NbLayoutModule} from "@nebular/theme";
+import {ActivatedRoute, Router, RouterModule} from "@angular/router";
+import {NbButtonModule, NbIconModule, NbLayoutModule} from "@nebular/theme";
 import {Song} from "../../../model/song";
 import {Track} from "../../../model/TrackInfo";
 import { BehaviorSubject } from 'rxjs';

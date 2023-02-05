@@ -1,3 +1,6 @@
+nb-card{
+  max-width:20rem;
+}
 nb-card-header{
     display: flex;
     justify-content: center;

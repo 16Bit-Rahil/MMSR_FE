@@ -1,15 +1,11 @@
 <ng-container *ngIf="searchResult$ | async as resultPage">
-
-    <!-- <nb-card [nbSpinner]="(loading$ | async)" nbSpinnerStatus="primary">
-    </nb-card> -->
-
     <ng-container *ngIf="resultPage.totalElements !== 0;else notFound">
         <h1>Search Results:</h1>
         <div class="search-result" >
-          <nb-card *ngFor="let song of resultPage.content; let i = index">
+          <ng-container *ngFor="let song of resultPage.content; let i = index">
             <song-item
             [song]="song"></song-item>
-          </nb-card>
+          </ng-container>
         </div>
         <div class="load-more-container">
           <button *ngIf="!resultPage.last"
@@ -18,11 +14,9 @@
           >More...</button>
         </div>
       </ng-container>
-
     <ng-template #notFound>
       <h1>No Results</h1>
     </ng-template>
-
-  </ng-container>
+</ng-container>
 
 
