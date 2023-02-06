@@ -5,23 +5,14 @@ import {APIModel} from "../../model/ApiModel";
 import {
   BehaviorSubject,
   catchError,
-  EMPTY,
   forkJoin,
-  from,
-  lastValueFrom,
   map,
-  mergeMap,
   Observable,
   of,
-  ReplaySubject,
-  Subject,
-  switchMap,
-  take,
-  tap
+  switchMap
 } from "rxjs";
 import { PageResponse } from 'src/app/model/page-response';
 
-import { Router } from '@angular/router';
 import {Track} from "../../model/TrackInfo";
 
 @Injectable({
@@ -29,7 +20,7 @@ import {Track} from "../../model/TrackInfo";
 })
 export class SimilarSongService {
 
-  readonly baseUrlSimilarSong = '/api/similar-song'
+  readonly baseUrlSimilarSong = 'http://Springbackend-env.eba-y7r4njjq.eu-central-1.elasticbeanstalk.com/api/similar-song'
 
   private similarSongs$ = new BehaviorSubject<PageResponse<{trackInfo:Track | null,song:Song}>>({} as PageResponse<{trackInfo:Track,song:Song}>);
 

@@ -12,7 +12,8 @@ import {Track} from "../../model/TrackInfo";
 })
 export class SearchService {
 
-  readonly baseUrlSong = '/api/songs'
+  readonly baseUrlSongs = 'http://Springbackend-env.eba-y7r4njjq.eu-central-1.elasticbeanstalk.com/api/songs'
+  readonly baseUrlSong = 'http://Springbackend-env.eba-y7r4njjq.eu-central-1.elasticbeanstalk.com/api/song'
 
   private searchResult$ = new BehaviorSubject<PageResponse<Song>>({} as PageResponse<Song>);
 
@@ -20,7 +21,7 @@ export class SearchService {
     private router:Router) {}
 
   private search$(term:string,page?:number){
-    return this.http.get<PageResponse<Song>>(`${this.baseUrlSong}?search=${encodeURIComponent(term)}&page=${page ?? 0}&pageSize=10`).pipe(
+    return this.http.get<PageResponse<Song>>(`${this.baseUrlSongs}?search=${encodeURIComponent(term)}&page=${page ?? 0}&pageSize=10`).pipe(
       switchMap(page => {
         if(page.totalElements === 0) {
           return of(page)
@@ -56,7 +57,7 @@ export class SearchService {
 
 
   getSongAndTrackDetailById(id: string): Observable<{trackInfo:Track,song:Song}> {
-    return this.http.get<Song>(`api/song/${encodeURIComponent(id)}`).pipe(
+    return this.http.get<Song>(`${this.baseUrlSong}/${encodeURIComponent(id)}`).pipe(
       switchMap(song => {
         return forkJoin({
           trackInfo:this.getTrackInfo(song.songName,song.artist),

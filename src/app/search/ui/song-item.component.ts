@@ -17,7 +17,7 @@ import {Song} from 'src/app/model/song';
         </div>
       </nb-card-body>
       <nb-card-footer>
-        <button routerLink="/song/{{song.id}}" nbButton>Details</button>
+        <button [routerLink]="['/','song',song.id]" nbButton>Details</button>
       </nb-card-footer>
     </nb-card>
   `,
