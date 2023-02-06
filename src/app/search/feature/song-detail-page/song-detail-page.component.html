@@ -29,7 +29,11 @@
         <nb-icon icon="person"></nb-icon>
         <p class="artists-title">{{details.song.artist}}</p>
       </div>
-      <app-yt-player videoID="{{getYoutubeId(details.song.youtubeLink)}}"></app-yt-player>
+      <ng-container *ngIf="details.song.youtubeLink">
+        <app-yt-player videoID="{{getYoutubeId(details.song.youtubeLink)}}"></app-yt-player>
+      </ng-container>
+      <div *ngIf="!details.song.youtubeLink"> NO YOUTUBE VIDEO</div>
+
       <div>
 
 <!--        <img [src]="details.song.imgLink" (error)="setDefaultCover(details.song)">-->
